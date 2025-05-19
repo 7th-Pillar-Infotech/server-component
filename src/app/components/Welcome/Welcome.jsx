@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import classes from './Welcome.module.css';
+import { hydrateRoot } from 'react-dom/client';
 
 function Welcome() {
   const [message, setMessage] = useState('');
@@ -13,9 +14,17 @@ function Welcome() {
   const loadDialog = () => {
     fetch('api/dialog')
       .then((res) => res.json())
-      .then(({ html }) => {
-        document.getElementById('dialog-container').innerHTML = html;
-        hydrateDialog();
+      .then(async ({ html, componentName }) => {
+        console.log({ html, componentName });
+        const container = document.getElementById('dialog-container');
+        container.innerHTML = html;
+
+        if (componentName) {
+          await hydrateDynamicComponent(componentName, container);
+        }
+
+        // document.getElementById('dialog-container').innerHTML = html;
+        // hydrateDialog();
       });
   };
 
@@ -28,15 +37,22 @@ function Welcome() {
   );
 }
 
-// Hydration Logic
-async function hydrateDialog() {
-  const React = window.React;
-  const { hydrateRoot } = await import('react-dom/client');
-  const DialogBox = await import('../DialogBox/DialogBox.jsx');
+async function hydrateDynamicComponent(componentName, container) {
+  try {
+    const module = await import(
+      /* @vite-ignore */ `/client/components/${componentName}/${componentName}.js`
+    );
+    const Component = module.default;
 
-  hydrateRoot(
-    document.getElementById('dialog-container'),
-    <DialogBox.default />
-  );
+    if (!Component) {
+      console.error(`Component ${componentName} not found in loaded module`);
+      return;
+    }
+
+    hydrateRoot(container, <Component />);
+  } catch (err) {
+    console.error(`Hydration failed for ${componentName}:`, err);
+  }
 }
+
 export default Welcome;

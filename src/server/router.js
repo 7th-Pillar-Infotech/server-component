@@ -10,8 +10,13 @@ router.get('/hello', async (_req, res) => {
 router.get('/dialog', async (req, res) => {
   try {
     const html = await renderComponent('DialogBox');
-    res.status(200).json({ html });
+    console.log({ html });
+    res.json({
+      html,
+      componentName: 'DialogBox',
+    });
   } catch (e) {
+    console.error('Render failed:', e.message);
     res.status(500).json({ error: 'Failed to render component' });
   }
 });

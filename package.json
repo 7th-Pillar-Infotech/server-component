@@ -13,7 +13,7 @@
     "prepare": "husky install",
     "test": "prettier --check . && eslint . && stylelint \"**/*.css\"",
     "start": "node dist/server.js",
-    "build:components": "babel src/app/components --out-dir public/client/components --extensions .jsx --copy-files"
+    "build:components": "cd shared-components && npx vite build --emptyOutDir"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.7",
