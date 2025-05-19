@@ -11,7 +11,7 @@
     "sourceType": "module"
   },
   "plugins": ["react-hooks"],
-  "rules": {},
+  "rules": { "no-undef": "off" },
   "settings": {
     "react": {
       "version": "17.0"
