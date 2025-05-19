@@ -20,4 +20,7 @@ export default defineConfig({
   build: {
     outDir: 'dist/app',
   },
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
+  },
 });
