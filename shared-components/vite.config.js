@@ -11,6 +11,7 @@ export default defineConfig({
       formats: ['es'],
     },
     rollupOptions: {
+      external: ['react', 'react-dom'],
       input: {
         DialogBox: './DialogBox/DialogBox.jsx',
       },
@@ -19,6 +20,7 @@ export default defineConfig({
         dir: '../public/client/components',
         globals: {
           react: 'React', // ✅ Expect global `React`
+          'react-dom': 'ReactDOM',
         },
       },
     },

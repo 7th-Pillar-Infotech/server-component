@@ -1,3 +1,11 @@
+require('@babel/register')({
+  presets: [
+    '@babel/preset-env',
+    ['@babel/preset-react', { runtime: 'automatic', importSource: 'React' }],
+  ],
+  extensions: ['.js', '.jsx'],
+});
+
 const express = require('express');
 const renderComponent = require('./renderComponent');
 

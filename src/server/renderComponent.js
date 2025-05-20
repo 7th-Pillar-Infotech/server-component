@@ -6,6 +6,9 @@ const fs = require('fs');
 const path = require('path');
 const { Writable } = require('stream');
 
+global.React = React;
+global.ReactDOM = ReactDOMServer;
+
 // Import all shared components
 const componentsPath = path.resolve(__dirname, '../../shared-components');
 const componentFolders = fs
@@ -14,7 +17,7 @@ const componentFolders = fs
 
 const components = {};
 
-componentFolders.forEach((folder) => {
+componentFolders.forEach(async (folder) => {
   const componentName = folder.name;
   const componentFilePath = path.resolve(
     componentsPath,
@@ -23,7 +26,7 @@ componentFolders.forEach((folder) => {
   );
 
   try {
-    const componentModule = require(componentFilePath);
+    const componentModule = await import(componentFilePath);
     const Component = componentModule.default || componentModule;
     // Save it in registry
     components[componentName] = Component;
@@ -40,7 +43,7 @@ module.exports = async function renderComponent(name, props = {}) {
     let html = '';
 
     const { pipe } = ReactDOMServer.renderToPipeableStream(
-      <Component {...props} />
+      React.createElement(Component, props)
     );
 
     // Create a real Writable stream that collects the HTML
