@@ -22,9 +22,6 @@ function Welcome() {
         if (componentName) {
           await hydrateDynamicComponent(componentName, container);
         }
-
-        // document.getElementById('dialog-container').innerHTML = html;
-        // hydrateDialog();
       });
   };
 
